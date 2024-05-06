@@ -1,76 +1,96 @@
 import React from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
-const ContactList = () => {
-  // Dummy contacts data
-  const contacts = [
-    { id: 1, firstName: "John", lastName: "Doe", phoneNumber: "123-456-7890" },
-    { id: 2, firstName: "Jane", lastName: "Doe", phoneNumber: "234-567-8901" },
+interface Contact {
+  id: number;
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+}
+
+const fetchContacts = async (): Promise<Contact[]> => {
+  const { data } = await axios.get<Contact[]>("/api/contacts");
+  return data;
+};
+
+const editContact = async (contact: Contact): Promise<Contact> => {
+  const { data } = await axios.put<Contact>(
+    `/api/contacts/${contact.id}`,
+    contact
+  );
+  return data;
+};
+
+const deleteContact = async (id: number): Promise<void> => {
+  await axios.delete(`/api/contacts/${id}`);
+};
+
+const ContactList: React.FC = () => {
+  const {
+    data: contacts,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery<Contact[], Error>("contacts", fetchContacts);
+
+  const { mutate: mutateEdit } = useMutation<Contact, Error, Contact>(
+    editContact,
     {
-      id: 3,
-      firstName: "Alice",
-      lastName: "Smith",
-      phoneNumber: "345-678-9012",
-    },
+      onSuccess: () => {
+        refetch();
+      },
+    }
+  );
+
+  const { mutate: mutateDelete } = useMutation<void, Error, number>(
+    deleteContact,
     {
-      id: 4,
-      firstName: "Bob",
-      lastName: "Johnson",
-      phoneNumber: "456-789-0123",
-    },
-  ];
+      onSuccess: () => {
+        refetch();
+      },
+    }
+  );
+
+  const handleEdit = (contact: Contact) => {
+    mutateEdit(contact);
+  };
+
+  const handleDelete = (id: number) => {
+    mutateDelete(id);
+  };
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8">
-      <h2 className="text-2xl font-semibold mb-4">Contact List</h2>
-      <div className="overflow-x-auto">
-        <table className="min-w-full border-collapse">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="py-2 px-4 text-left text-xs font-medium text-gray-600 uppercase">
-                ID
-              </th>
-              <th className="py-2 px-4 text-left text-xs font-medium text-gray-600 uppercase">
-                First Name
-              </th>
-              <th className="py-2 px-4 text-left text-xs font-medium text-gray-600 uppercase">
-                Last Name
-              </th>
-              <th className="py-2 px-4 text-left text-xs font-medium text-gray-600 uppercase">
-                Phone Number
-              </th>
-              <th className="py-2 px-4 text-left text-xs font-medium text-gray-600 uppercase">
-                Actions
-              </th>
+    <div>
+      <h2>Contact List</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {contacts.map((contact) => (
+            <tr key={contact.id}>
+              <td>{contact.id}</td>
+              <td>{contact.fullName}</td>
+              <td>{contact.email}</td>
+              <td>{contact.phoneNumber}</td>
+              <td>
+                <button onClick={() => handleEdit(contact)}>Edit</button>
+                <button onClick={() => handleDelete(contact.id)}>Delete</button>
+              </td>
             </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {contacts.map((contact) => (
-              <tr key={contact.id}>
-                <td className="py-3 px-4 text-sm text-gray-800">
-                  {contact.id}
-                </td>
-                <td className="py-3 px-4 text-sm text-gray-800">
-                  {contact.firstName}
-                </td>
-                <td className="py-3 px-4 text-sm text-gray-800">
-                  {contact.lastName}
-                </td>
-                <td className="py-3 px-4 text-sm text-gray-800">
-                  {contact.phoneNumber}
-                </td>
-                <td className="py-3 px-4 text-sm text-gray-800">
-                  <button className="mr-2 text-blue-500 hover:text-blue-600">
-                    Edit
-                  </button>
-                  <button className="text-red-500 hover:text-red-600">
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
