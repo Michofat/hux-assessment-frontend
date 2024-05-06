@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import SideBar from "../components/SideBar";
 import ContactForm from "../components/ContactForm";
 import axios from "axios";
 
@@ -55,29 +55,7 @@ const NewContact = () => {
 
       {/* Main Content */}
       <div className="flex">
-        {/* Sidebar */}
-        <aside className="bg-gray-800 text-white w-2/12 p-4">
-          <nav>
-            <ul>
-              <li className="py-2">
-                <a href="#" className="block">
-                  Home
-                </a>
-              </li>
-              <Link to="/newContact">
-                <button className="bg-gray-700 text-white py-2 px-4 rounded-lg">
-                  Add new contact
-                </button>
-              </Link>
-
-              <li className="py-2">
-                <a href="/logout" className="block">
-                  Logout
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </aside>
+        <SideBar />
 
         <ContactForm />
       </div>
