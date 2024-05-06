@@ -3,7 +3,7 @@
 // import Box from "@mui/material/Box";
 // import Button from "@mui/material/Button";
 // import { Link } from "react-router-dom";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   return (
@@ -17,12 +17,11 @@ export default function Home() {
           your contacts efficiently.
         </p>
         <div className="flex justify-center">
-          <button className="bg-blue-500 text-white py-2 px-4 rounded-lg mr-4">
-            Sign Up
-          </button>
-          <button className="bg-gray-700 text-white py-2 px-4 rounded-lg">
-            Login
-          </button>
+          <Link to="/userLogin">
+            <button className="bg-gray-700 text-white py-2 px-4 rounded-lg">
+              Login
+            </button>
+          </Link>
         </div>
       </div>
     </div>
