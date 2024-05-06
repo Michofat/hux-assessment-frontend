@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import ContactForm from "../components/ContactForm";
 import axios from "axios";
 
-const Dashboard = () => {
+const NewContact = () => {
   const [contacts, setContacts] = useState([]);
 
   useEffect(() => {
@@ -78,49 +79,7 @@ const Dashboard = () => {
           </nav>
         </aside>
 
-        {/* Main Page */}
-        <main className="w-10/12 p-4">
-          <h2 className="text-2xl font-semibold mb-4">All Contacts</h2>
-          <table className="w-full border-collapse border border-gray-300">
-            <thead className="bg-gray-200">
-              <tr>
-                <th className="py-2 px-4 border border-gray-300 text-left">
-                  First Name
-                </th>
-                <th className="py-2 px-4 border border-gray-300 text-left">
-                  Last Name
-                </th>
-                <th className="py-2 px-4 border border-gray-300 text-left">
-                  Phone Number
-                </th>
-                <th className="py-2 px-4 border border-gray-300 text-left">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {contacts.map((contact, index) => (
-                <tr key={index}>
-                  <td className="py-2 px-4 border border-gray-300">
-                    {contact.firstName}
-                  </td>
-                  <td className="py-2 px-4 border border-gray-300">
-                    {contact.lastName}
-                  </td>
-                  <td className="py-2 px-4 border border-gray-300">
-                    {contact.phoneNumber}
-                  </td>
-                  <td className="py-2 px-4 border border-gray-300">
-                    <button className="mr-2" onClick={() => handleEdit(index)}>
-                      Edit
-                    </button>
-                    <button onClick={() => handleDelete(index)}>Delete</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </main>
+        <ContactForm />
       </div>
     </div>
   );
@@ -131,4 +90,4 @@ function logout() {
   alert("Logout button clicked");
 }
 
-export default Dashboard;
+export default NewContact;
