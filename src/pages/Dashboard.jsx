@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SideBar from "../components/SideBar";
 import axios from "axios";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const Dashboard = () => {
   const [contacts, setContacts] = useState([]);
@@ -91,9 +93,11 @@ const Dashboard = () => {
                   </td>
                   <td className="py-2 px-4 border border-gray-300">
                     <button className="mr-2" onClick={() => handleEdit(index)}>
-                      Edit
+                      <EditIcon />
                     </button>
-                    <button onClick={() => handleDelete(index)}>Delete</button>
+                    <button onClick={() => handleDelete(index)}>
+                      <DeleteIcon />
+                    </button>
                   </td>
                 </tr>
               ))}
