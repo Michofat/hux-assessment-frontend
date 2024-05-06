@@ -1,5 +1,7 @@
 import "./App.css";
-import Login from "./pages/Login";
+//import Login from "./pages/Login";
+// import AddContactForm from "./pages/AddContactForm";
+import ContactList from "./pages/ContactList";
 
 function App() {
   return (
@@ -22,7 +24,7 @@ function App() {
     //     </div>
     //   </div>
     // </div>
-    <Login />
+    <ContactList />
   );
 }
 
