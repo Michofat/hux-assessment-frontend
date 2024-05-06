@@ -31,7 +31,7 @@ const UserLogin = () => {
     try {
       setIsLoading(true); // Start CircularProgress
 
-      const response = await axiosInstance.post("/userlogin", data);
+      const response = await axiosInstance.post("/login", data);
       toast.success("Login successful");
       setToken(response?.data?.token);
       nav("/dashboard");
@@ -105,13 +105,9 @@ const UserLogin = () => {
             )}
           </Button>
           <Grid container>
-            <Grid item xs>
-              <Link to="/forgotpassword" style={{ textDecoration: "none" }}>
-                Forgot password?
-              </Link>
-            </Grid>
+            <Grid item xs></Grid>
             <Grid item>
-              <Link to="/adminregister" style={{ textDecoration: "none" }}>
+              <Link to="/registration" style={{ textDecoration: "none" }}>
                 Don't have an account? Sign Up
               </Link>
             </Grid>

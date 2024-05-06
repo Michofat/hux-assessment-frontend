@@ -1,5 +1,4 @@
 // import React, { useState } from "react";
-import "./App.css";
 import AppRoutes from "./router/AppRoutes";
 import { BrowserRouter } from "react-router-dom";
 // import AddContactForm from "./pages/AddContactForm";
