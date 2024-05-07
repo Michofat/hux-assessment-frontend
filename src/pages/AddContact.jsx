@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import SideBar from "../components/SideBar";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const NewContact = () => {
-  const nav = useNavigate();
+  // const nav = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,

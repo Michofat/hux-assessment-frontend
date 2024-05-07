@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 
 import Home from "../components/Home";
-import UserLogin from "../components/UserLogin";
+import UserLogin from "../pages/UserLogin";
 import Dashboard from "../pages/Dashboard";
 //import NewContact from "../pages/NewContact";
 import AddContact from "../pages/AddContact";
