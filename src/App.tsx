@@ -1,8 +1,5 @@
-// import React, { useState } from "react";
-import AppRoutes from "./router/AppRoutes";
+import AppRoutes from "./router/AppRoutes.jsx";
 import { BrowserRouter } from "react-router-dom";
-// import AddContactForm from "./pages/AddContactForm";
-//import ContactList from "./pages/ContactList";
 
 function App() {
   return (

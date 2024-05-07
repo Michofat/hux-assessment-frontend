@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import SideBar from "../components/SideBar";
 import axios from "axios";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Modal, Button } from "@mui/material";
+import { Modal } from "@mui/material";
+import Header from "../components/Header";
 
 const Dashboard = () => {
   const [contacts, setContacts] = useState([]);
@@ -91,12 +91,7 @@ const Dashboard = () => {
   return (
     <div className="bg-gray-100 min-h-screen">
       {/* App Header */}
-      <header className="bg-blue-500 py-4 px-8 flex justify-between items-center">
-        <h1 className="text-white text-2xl font-semibold">Dashboard</h1>
-        <button className="text-white font-semibold" onClick={logout}>
-          Logout
-        </button>
-      </header>
+      <Header />
 
       {/* Main Content */}
       <div className="flex">

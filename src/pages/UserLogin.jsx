@@ -36,7 +36,7 @@ const UserLogin = () => {
       setToken(response?.data?.token);
       nav("/dashboard");
     } catch (error) {
-      toast.error(error.response?.data?.message || "An error occurred");
+      alert(error.response?.data?.message || "An error occurred");
     } finally {
       setIsLoading(false);
     }
