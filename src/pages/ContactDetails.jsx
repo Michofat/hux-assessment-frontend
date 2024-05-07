@@ -21,7 +21,7 @@ const ContactDetails = () => {
       const contactDetails = response.data.result;
       setContactDetails(contactDetails);
     } catch (error) {
-      console.error("Error fetching contact details:", error);
+      alert("Error fetching contact details:", error);
     }
   };
 

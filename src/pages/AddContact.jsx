@@ -6,11 +6,12 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate } from "react-router-dom";
 import { decodeTokenFromStorage } from "../utils/token";
 import { checkedLoggedIn } from "../utils/checkLoggedIn";
+import Header from "../components/Header";
 
 const NewContact = () => {
   const navigate = useNavigate();
   const userDetails = decodeTokenFromStorage();
-  console.log("USERDETAILS", userDetails);
+
   useEffect(() => {
     checkedLoggedIn(userDetails, navigate);
   }, [navigate, userDetails]);
@@ -39,15 +40,7 @@ const NewContact = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen">
-      {/* App Header */}
-      <header className="bg-blue-500 py-4 px-8 flex justify-between items-center">
-        <h1 className="text-white text-2xl font-semibold">Dashboard</h1>
-        <button className="text-white font-semibold" onClick={logout}>
-          Logout
-        </button>
-      </header>
-
-      {/* Main Content */}
+      <Header />
       <div className="flex">
         <SideBar />
 
@@ -136,10 +129,5 @@ const NewContact = () => {
     </div>
   );
 };
-
-function logout() {
-  // Implement your logout logic here
-  alert("Logout button clicked");
-}
 
 export default NewContact;

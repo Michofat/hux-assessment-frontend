@@ -23,20 +23,20 @@ const Dashboard = () => {
       const result = response.data.result;
       setContacts(result);
     } catch (error) {
-      console.error(error);
+      alert("Error fetching contacts");
     }
   };
 
   const handleEdit = (contact) => {
     setSelectedContact(contact);
-    setEditedContact(contact); // Set editedContact state to the selected contact
+    setEditedContact(contact);
     setIsEditModalOpen(true);
   };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.patch(
+      await axios.patch(
         `http://localhost:8000/api/v1/contact/${selectedContact.contactId}`,
         {
           firstName: selectedContact.firstName,
@@ -45,10 +45,9 @@ const Dashboard = () => {
         }
       );
       closeModal();
-      fetchContacts(); // Assuming fetchContacts function fetches the updated contact list
+      fetchContacts();
       alert("Contact updated successfully");
     } catch (error) {
-      console.error("Error updating contact:", error);
       alert("Failed to update contact");
     }
   };
@@ -59,7 +58,6 @@ const Dashboard = () => {
       ...editedContact,
       [name]: value,
     });
-    console.log("setEditedContact", setEditedContact);
   };
 
   const handleDelete = (contact) => {
@@ -73,10 +71,9 @@ const Dashboard = () => {
         `http://localhost:8000/api/v1/contact/${selectedContact.contactId}`
       );
       closeModal();
-      fetchContacts(); // Assuming fetchContacts function fetches the updated contact list
+      fetchContacts();
       alert("Contact deleted successfully");
     } catch (error) {
-      console.error("Error deleting contact:", error);
       alert("Failed to delete contact");
     }
   };
@@ -90,14 +87,11 @@ const Dashboard = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen">
-      {/* App Header */}
       <Header />
 
-      {/* Main Content */}
       <div className="flex">
         <SideBar />
 
-        {/* Main Page */}
         <main className="w-10/12 p-4">
           <h2 className="text-2xl font-semibold mb-4">All Contacts</h2>
           <table className="w-full border-collapse border border-gray-300">
@@ -147,20 +141,17 @@ const Dashboard = () => {
         </main>
       </div>
 
-      {/* Edit Modal */}
       <Modal
         open={isEditModalOpen}
         onClose={closeModal}
         aria-labelledby="edit-modal-title"
         className="flex justify-center items-center"
       >
-        {/* Modal Content */}
         <div className="modal-content bg-white p-8 rounded-lg shadow-lg w-96">
           <h2 id="edit-modal-title" className="text-xl font-bold mb-4">
             Edit Contact
           </h2>
           <form onSubmit={handleUpdate}>
-            {/* First Name */}
             <div className="mb-4 flex flex-col">
               <label htmlFor="firstName" className="mb-1">
                 First Name:
@@ -174,7 +165,6 @@ const Dashboard = () => {
                 className="rounded-lg border border-gray-300 px-3 py-2 mb-2"
               />
             </div>
-            {/* Last Name */}
             <div className="mb-4 flex flex-col">
               <label htmlFor="lastName" className="mb-1">
                 Last Name:
@@ -188,7 +178,6 @@ const Dashboard = () => {
                 className="rounded-lg border border-gray-300 px-3 py-2 mb-2"
               />
             </div>
-            {/* Phone Number */}
             <div className="mb-4 flex flex-col">
               <label htmlFor="phoneNumber" className="mb-1">
                 Phone Number:
@@ -202,7 +191,6 @@ const Dashboard = () => {
                 className="rounded-lg border border-gray-300 px-3 py-2 mb-2"
               />
             </div>
-            {/* Update Button */}
             <div className="flex justify-end">
               <button
                 type="submit"
@@ -210,7 +198,6 @@ const Dashboard = () => {
               >
                 Update
               </button>
-              {/* Cancel Button */}
               <button
                 type="button"
                 onClick={closeModal}
@@ -222,8 +209,6 @@ const Dashboard = () => {
           </form>
         </div>
       </Modal>
-      {/* Delete Modal */}
-      {/* Delete Modal */}
       <Modal
         open={isDeleteModalOpen}
         onClose={closeModal}
@@ -234,7 +219,6 @@ const Dashboard = () => {
             Delete Contact
           </h2>
           <p>Are you sure to delete {selectedContact?.firstName}?</p>
-          {/* Delete Button */}
           <div className="flex justify-end mt-4">
             <button
               onClick={confirmDelete}
@@ -242,7 +226,6 @@ const Dashboard = () => {
             >
               Delete
             </button>
-            {/* Cancel Button */}
             <button
               onClick={closeModal}
               className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg ml-4"
@@ -255,10 +238,5 @@ const Dashboard = () => {
     </div>
   );
 };
-
-function logout() {
-  // Implement your logout logic here
-  alert("Logout button clicked");
-}
 
 export default Dashboard;

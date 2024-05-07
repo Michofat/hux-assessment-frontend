@@ -13,7 +13,7 @@ import { CircularProgress } from "@mui/material";
 const Dashboard = () => {
   const navigate = useNavigate();
   const userDetails = decodeTokenFromStorage();
-  console.log("USERDETAILS", userDetails);
+
   useEffect(() => {
     checkedLoggedIn(userDetails, navigate);
   }, [navigate, userDetails]);
@@ -34,18 +34,17 @@ const Dashboard = () => {
       const result = response.data.result;
       setContacts(result);
     } catch (error) {
-      console.error(error);
+      alert("Error fetching contacts");
     }
   };
 
   const handleEdit = (contact) => {
     setSelectedContact(contact);
-    setEditedContact(contact); // Set editedContact state to the selected contact
+    setEditedContact(contact);
     setIsEditModalOpen(true);
   };
 
   const handleUpdate = async (e) => {
-    console.log("CONTAAAAACT", editedContact);
     e.preventDefault();
     try {
       await axios.patch(
@@ -57,10 +56,9 @@ const Dashboard = () => {
         }
       );
       closeModal();
-      fetchContacts(); // Assuming fetchContacts function fetches the updated contact list
+      fetchContacts();
       alert("Contact updated successfully");
     } catch (error) {
-      console.error("Error updating contact:", error);
       alert("Failed to update contact");
     }
   };
@@ -84,10 +82,9 @@ const Dashboard = () => {
         `http://localhost:8000/api/v1/contact/${selectedContact.contactId}`
       );
       closeModal();
-      fetchContacts(); // Assuming fetchContacts function fetches the updated contact list
+      fetchContacts();
       alert("Contact deleted successfully");
     } catch (error) {
-      console.error("Error deleting contact:", error);
       alert("Failed to delete contact");
     }
   };
@@ -105,13 +102,10 @@ const Dashboard = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen">
-      {/* App Header */}
       <Header />
-      {/* Main Content */}
       <div className="flex">
         <SideBar />
 
-        {/* Main Page */}
         <main className="w-10/12 p-4">
           <h2 className="text-2xl font-semibold mb-4">
             Welcome <span className="text-blue-500">{userDetails?.email}</span>
@@ -120,19 +114,19 @@ const Dashboard = () => {
           <h3 className="text-lg font-semibold mb-4 text-gray-600 text-center">
             All Contacts
           </h3>
-          <table className="w-full border-collapse border border-gray-300">
+          <table className="w-full overflow-x-auto border-collapse border border-gray-300">
             <thead className="bg-gray-200">
               <tr>
-                <th className="py-2 px-4 border border-gray-300 text-left">
+                <th className="px-2 py-1 sm:px-4 sm:py-2 border border-gray-300 text-left">
                   First Name
                 </th>
-                <th className="py-2 px-4 border border-gray-300 text-left">
+                <th className="px-2 py-1 sm:px-4 sm:py-2 border border-gray-300 text-left">
                   Last Name
                 </th>
-                <th className="py-2 px-4 border border-gray-300 text-left">
+                <th className="px-2 py-1 sm:px-4 sm:py-2 border border-gray-300 text-left">
                   Phone Number
                 </th>
-                <th className="py-2 px-4 border border-gray-300 text-left">
+                <th className="px-2 py-1 sm:px-4 sm:py-2 border border-gray-300 text-left">
                   Actions
                 </th>
               </tr>
@@ -141,7 +135,7 @@ const Dashboard = () => {
               {contacts ? (
                 contacts.map((contact, index) => (
                   <tr key={index}>
-                    <td className="py-2 px-4 border border-gray-300">
+                    <td className="px-2 py-1 sm:px-4 sm:py-2 border border-gray-300 text-sm">
                       <button
                         className="mr-2 text-blue-500"
                         onClick={() => handleDetails(contact.contactId)}
@@ -149,13 +143,13 @@ const Dashboard = () => {
                         {contact.firstName}
                       </button>{" "}
                     </td>
-                    <td className="py-2 px-4 border border-gray-300">
+                    <td className="px-2 py-1 sm:px-4 sm:py-2 border border-gray-300 text-sm">
                       {contact.lastName}
                     </td>
-                    <td className="py-2 px-4 border border-gray-300">
+                    <td className="px-2 py-1 sm:px-4 sm:py-2 border border-gray-300 text-sm">
                       {contact.phoneNumber}
                     </td>
-                    <td className="py-2 px-4 border border-gray-300">
+                    <td className="px-2 py-1 sm:px-4 sm:py-2 border border-gray-300 text-sm">
                       <button
                         className="mr-2"
                         onClick={() => handleEdit(contact)}
@@ -170,7 +164,10 @@ const Dashboard = () => {
                 ))
               ) : (
                 <tr>
-                  <td className="py-4 px-4 border border-gray-300" colSpan="4">
+                  <td
+                    className="px-2 py-1 sm:px-4 sm:py-2 border border-gray-300 text-sm"
+                    colSpan="4"
+                  >
                     <div className="flex justify-center items-center">
                       <CircularProgress size={24} color="inherit" />
                     </div>
@@ -182,20 +179,17 @@ const Dashboard = () => {
         </main>
       </div>
 
-      {/* Edit Modal */}
       <Modal
         open={isEditModalOpen}
         onClose={closeModal}
         aria-labelledby="edit-modal-title"
         className="flex justify-center items-center"
       >
-        {/* Modal Content */}
         <div className="modal-content bg-white p-8 rounded-lg shadow-lg w-96">
           <h2 id="edit-modal-title" className="text-xl font-bold mb-4">
             Edit Contact
           </h2>
           <form onSubmit={handleUpdate}>
-            {/* First Name */}
             <div className="mb-4 flex flex-col">
               <label htmlFor="firstName" className="mb-1">
                 First Name:
@@ -209,7 +203,6 @@ const Dashboard = () => {
                 className="rounded-lg border border-gray-300 px-3 py-2 mb-2"
               />
             </div>
-            {/* Last Name */}
             <div className="mb-4 flex flex-col">
               <label htmlFor="lastName" className="mb-1">
                 Last Name:
@@ -223,7 +216,6 @@ const Dashboard = () => {
                 className="rounded-lg border border-gray-300 px-3 py-2 mb-2"
               />
             </div>
-            {/* Phone Number */}
             <div className="mb-4 flex flex-col">
               <label htmlFor="phoneNumber" className="mb-1">
                 Phone Number:
@@ -237,7 +229,6 @@ const Dashboard = () => {
                 className="rounded-lg border border-gray-300 px-3 py-2 mb-2"
               />
             </div>
-            {/* Update Button */}
             <div className="flex justify-end">
               <button
                 type="submit"
@@ -245,7 +236,6 @@ const Dashboard = () => {
               >
                 Update
               </button>
-              {/* Cancel Button */}
               <button
                 type="button"
                 onClick={closeModal}
@@ -257,8 +247,6 @@ const Dashboard = () => {
           </form>
         </div>
       </Modal>
-      {/* Delete Modal */}
-      {/* Delete Modal */}
       <Modal
         open={isDeleteModalOpen}
         onClose={closeModal}
@@ -269,7 +257,6 @@ const Dashboard = () => {
             Delete Contact
           </h2>
           <p>Are you sure to delete {selectedContact?.firstName}?</p>
-          {/* Delete Button */}
           <div className="flex justify-end mt-4">
             <button
               onClick={confirmDelete}
@@ -277,7 +264,6 @@ const Dashboard = () => {
             >
               Delete
             </button>
-            {/* Cancel Button */}
             <button
               onClick={closeModal}
               className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg ml-4"

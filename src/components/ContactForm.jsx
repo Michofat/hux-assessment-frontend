@@ -11,11 +11,7 @@ const ContactForm = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post(
-        "http://localhost:8000/api/v1/contact",
-        data
-      );
-      console.log("Contact submitted successfully:", response.data);
+      await axios.post("http://localhost:8000/api/v1/contact", data);
     } catch (error) {
       console.error("Failed to submit contact:", error);
     }
