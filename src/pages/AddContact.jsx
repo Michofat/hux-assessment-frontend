@@ -94,12 +94,21 @@ const NewContact = () => {
               <input
                 type="text"
                 id="phoneNumber"
-                {...register("phoneNumber", { required: true })}
+                {...register("phoneNumber", {
+                  required: true,
+                  pattern: {
+                    value: /^[0-9]{11,15}$/,
+                    message:
+                      "Phone Number must be between 11 and 15 digits and contain numbers only",
+                  },
+                })}
                 className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
                 placeholder="Enter Phone Number"
               />
               {errors.phoneNumber && (
-                <p className="text-sm text-red-500">Phone Number is required</p>
+                <p className="text-sm text-red-500">
+                  {errors.phoneNumber.message}
+                </p>
               )}
             </div>
 
