@@ -11,6 +11,7 @@ const Dashboard = () => {
   const [selectedContact, setSelectedContact] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [editedContact, setEditedContact] = useState(selectedContact || {});
 
   useEffect(() => {
     fetchContacts();
@@ -28,22 +29,56 @@ const Dashboard = () => {
 
   const handleEdit = (contact) => {
     setSelectedContact(contact);
+    setEditedContact(contact); // Set editedContact state to the selected contact
     setIsEditModalOpen(true);
   };
 
-  const handleUpdate = (contact) => {
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.patch(
+        `http://localhost:8000/api/v1/contact/${selectedContact.contactId}`,
+        {
+          firstName: selectedContact.firstName,
+          lastName: selectedContact.lastName,
+          phoneNumber: selectedContact.phoneNumber,
+        }
+      );
+      closeModal();
+      fetchContacts(); // Assuming fetchContacts function fetches the updated contact list
+      alert("Contact updated successfully");
+    } catch (error) {
+      console.error("Error updating contact:", error);
+      alert("Failed to update contact");
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedContact({
+      ...editedContact,
+      [name]: value,
+    });
+  };
+  console.log("setEditedContact", setEditedContact);
+
+  const handleDelete = (contact) => {
     setSelectedContact(contact);
-    setIsEditModalOpen(true);
-  };
-
-  const handleInputChange = (contact) => {
-    setSelectedContact(contact);
-    setIsEditModalOpen(true);
-  };
-
-  const handleDelete = (contactId) => {
-    setSelectedContact(contactId);
     setIsDeleteModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await axios.delete(
+        `http://localhost:8000/api/v1/contact/${selectedContact.contactId}`
+      );
+      closeModal();
+      fetchContacts(); // Assuming fetchContacts function fetches the updated contact list
+      alert("Contact deleted successfully");
+    } catch (error) {
+      console.error("Error deleting contact:", error);
+      alert("Failed to delete contact");
+    }
   };
 
   const closeModal = () => {
@@ -124,11 +159,13 @@ const Dashboard = () => {
         aria-labelledby="edit-modal-title"
         className="flex justify-center items-center"
       >
+        {/* Modal Content */}
         <div className="modal-content bg-white p-8 rounded-lg shadow-lg w-96">
           <h2 id="edit-modal-title" className="text-xl font-bold mb-4">
             Edit Contact
           </h2>
           <form onSubmit={handleUpdate}>
+            {/* First Name */}
             <div className="mb-4 flex flex-col">
               <label htmlFor="firstName" className="mb-1">
                 First Name:
@@ -137,11 +174,12 @@ const Dashboard = () => {
                 type="text"
                 id="firstName"
                 name="firstName"
-                value={selectedContact?.firstName || ""}
+                value={editedContact.firstName || ""}
                 onChange={handleInputChange}
                 className="rounded-lg border border-gray-300 px-3 py-2 mb-2"
               />
             </div>
+            {/* Last Name */}
             <div className="mb-4 flex flex-col">
               <label htmlFor="lastName" className="mb-1">
                 Last Name:
@@ -150,11 +188,12 @@ const Dashboard = () => {
                 type="text"
                 id="lastName"
                 name="lastName"
-                value={selectedContact?.lastName || ""}
+                value={editedContact.lastName || ""}
                 onChange={handleInputChange}
                 className="rounded-lg border border-gray-300 px-3 py-2 mb-2"
               />
             </div>
+            {/* Phone Number */}
             <div className="mb-4 flex flex-col">
               <label htmlFor="phoneNumber" className="mb-1">
                 Phone Number:
@@ -163,11 +202,12 @@ const Dashboard = () => {
                 type="text"
                 id="phoneNumber"
                 name="phoneNumber"
-                value={selectedContact?.phoneNumber || ""}
+                value={editedContact.phoneNumber || ""}
                 onChange={handleInputChange}
                 className="rounded-lg border border-gray-300 px-3 py-2 mb-2"
               />
             </div>
+            {/* Update Button */}
             <div className="flex justify-end">
               <button
                 type="submit"
@@ -175,6 +215,7 @@ const Dashboard = () => {
               >
                 Update
               </button>
+              {/* Cancel Button */}
               <button
                 type="button"
                 onClick={closeModal}
@@ -186,7 +227,6 @@ const Dashboard = () => {
           </form>
         </div>
       </Modal>
-
       {/* Delete Modal */}
       <Modal
         open={isDeleteModalOpen}
