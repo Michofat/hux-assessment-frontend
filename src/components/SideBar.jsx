@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function SideBar() {
   return (
-    <aside className="bg-gray-800 text-white w-full sm:w-2/6 md:w-2/12 p-4">
+    <aside className="bg-gray-800 text-white w-full h-screen sm:w-2/6 md:w-2/12 p-4">
       <nav>
         <ul>
           <Link to="/dashboard">
