@@ -5,8 +5,11 @@ import axios from "axios";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Modal, Button } from "@mui/material";
+import { decodeTokenFromStorage } from "../utils/token";
 
 const Dashboard = () => {
+  const userDetails = decodeTokenFromStorage();
+  console.log("USERDETAILS", userDetails);
   const [contacts, setContacts] = useState([]);
   const [selectedContact, setSelectedContact] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -104,7 +107,13 @@ const Dashboard = () => {
 
         {/* Main Page */}
         <main className="w-10/12 p-4">
-          <h2 className="text-2xl font-semibold mb-4">All Contacts</h2>
+          <h2 className="text-2xl font-semibold mb-4">
+            Welcome <span className="text-blue-500">{userDetails?.email}</span>
+          </h2>
+
+          <h3 className="text-lg font-semibold mb-4 text-gray-600 text-center">
+            All Contacts
+          </h3>
           <table className="w-full border-collapse border border-gray-300">
             <thead className="bg-gray-200">
               <tr>
