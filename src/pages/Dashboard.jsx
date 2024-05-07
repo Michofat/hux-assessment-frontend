@@ -59,8 +59,8 @@ const Dashboard = () => {
       ...editedContact,
       [name]: value,
     });
+    console.log("setEditedContact", setEditedContact);
   };
-  console.log("setEditedContact", setEditedContact);
 
   const handleDelete = (contact) => {
     setSelectedContact(contact);
@@ -141,7 +141,7 @@ const Dashboard = () => {
                     >
                       <EditIcon />
                     </button>
-                    <button onClick={() => handleDelete(contact.contactId)}>
+                    <button onClick={() => handleDelete(contact)}>
                       <DeleteIcon />
                     </button>
                   </td>
@@ -228,15 +228,33 @@ const Dashboard = () => {
         </div>
       </Modal>
       {/* Delete Modal */}
+      {/* Delete Modal */}
       <Modal
         open={isDeleteModalOpen}
         onClose={closeModal}
         aria-labelledby="delete-modal-title"
       >
-        <div className="modal-content">
-          <h2 id="delete-modal-title">Delete Contact</h2>
-          {/* Place your delete modal content here */}
-          <Button onClick={closeModal}>Close</Button>
+        <div className="modal-content p-8 rounded-lg shadow-lg bg-white z-50">
+          <h2 id="delete-modal-title" className="text-xl font-bold mb-4">
+            Delete Contact
+          </h2>
+          <p>Are you sure to delete {selectedContact?.firstName}?</p>
+          {/* Delete Button */}
+          <div className="flex justify-end mt-4">
+            <button
+              onClick={confirmDelete}
+              className="bg-red-500 text-white px-4 py-2 rounded-lg"
+            >
+              Delete
+            </button>
+            {/* Cancel Button */}
+            <button
+              onClick={closeModal}
+              className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg ml-4"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       </Modal>
     </div>

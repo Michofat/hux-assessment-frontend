@@ -11,7 +11,7 @@ function SideBar() {
               Home
             </button>
           </Link>
-          <Link to="/newContact">
+          <Link to="/addContact">
             <button className="bg-gray-700 text-white mb-2 py-2 px-4 rounded-lg">
               Add new contact
             </button>
