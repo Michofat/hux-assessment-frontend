@@ -8,6 +8,7 @@ import { Modal } from "@mui/material";
 import { decodeTokenFromStorage } from "../utils/token";
 import Header from "../components/Header";
 import { checkedLoggedIn } from "../utils/checkLoggedIn";
+import { CircularProgress } from "@mui/material";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -47,7 +48,7 @@ const Dashboard = () => {
     console.log("CONTAAAAACT", editedContact);
     e.preventDefault();
     try {
-      const response = await axios.patch(
+      await axios.patch(
         `http://localhost:8000/api/v1/contact/${selectedContact.contactId}`,
         {
           firstName: editedContact.firstName,
@@ -98,6 +99,10 @@ const Dashboard = () => {
     fetchContacts();
   };
 
+  const handleDetails = (contactId) => {
+    navigate(`/contactdetails/${contactId}`);
+  };
+
   return (
     <div className="bg-gray-100 min-h-screen">
       {/* App Header */}
@@ -133,30 +138,45 @@ const Dashboard = () => {
               </tr>
             </thead>
             <tbody>
-              {contacts.map((contact, index) => (
-                <tr key={index}>
-                  <td className="py-2 px-4 border border-gray-300">
-                    {contact.firstName}
-                  </td>
-                  <td className="py-2 px-4 border border-gray-300">
-                    {contact.lastName}
-                  </td>
-                  <td className="py-2 px-4 border border-gray-300">
-                    {contact.phoneNumber}
-                  </td>
-                  <td className="py-2 px-4 border border-gray-300">
-                    <button
-                      className="mr-2"
-                      onClick={() => handleEdit(contact)}
-                    >
-                      <EditIcon />
-                    </button>
-                    <button onClick={() => handleDelete(contact)}>
-                      <DeleteIcon />
-                    </button>
+              {contacts ? (
+                contacts.map((contact, index) => (
+                  <tr key={index}>
+                    <td className="py-2 px-4 border border-gray-300">
+                      <button
+                        className="mr-2 text-blue-500"
+                        onClick={() => handleDetails(contact.contactId)}
+                      >
+                        {contact.firstName}
+                      </button>{" "}
+                    </td>
+                    <td className="py-2 px-4 border border-gray-300">
+                      {contact.lastName}
+                    </td>
+                    <td className="py-2 px-4 border border-gray-300">
+                      {contact.phoneNumber}
+                    </td>
+                    <td className="py-2 px-4 border border-gray-300">
+                      <button
+                        className="mr-2"
+                        onClick={() => handleEdit(contact)}
+                      >
+                        <EditIcon />
+                      </button>
+                      <button onClick={() => handleDelete(contact)}>
+                        <DeleteIcon />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td className="py-4 px-4 border border-gray-300" colSpan="4">
+                    <div className="flex justify-center items-center">
+                      <CircularProgress size={24} color="inherit" />
+                    </div>
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </main>
@@ -270,10 +290,5 @@ const Dashboard = () => {
     </div>
   );
 };
-
-function logout() {
-  // Implement your logout logic here
-  alert("Logout button clicked");
-}
 
 export default Dashboard;

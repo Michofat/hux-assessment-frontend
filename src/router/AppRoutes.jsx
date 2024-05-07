@@ -5,6 +5,7 @@ import Dashboard from "../pages/Dashboard";
 import AddContact from "../pages/AddContact";
 import Logout from "../components/Logout";
 import SignUp from "../pages/SignUp";
+import ContactDetails from "../pages/ContactDetails";
 
 const AppRoutes = () => {
   return (
@@ -15,6 +16,7 @@ const AppRoutes = () => {
       <Route path="/logout" element={<Logout />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/addcontact" element={<AddContact />} />
+      <Route path="/contactdetails/:contactId" element={<ContactDetails />} />
     </Routes>
   );
 };
