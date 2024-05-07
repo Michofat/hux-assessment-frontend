@@ -34,14 +34,15 @@ const Dashboard = () => {
   };
 
   const handleUpdate = async (e) => {
+    console.log("CONTAAAAACT", editedContact);
     e.preventDefault();
     try {
       const response = await axios.patch(
         `http://localhost:8000/api/v1/contact/${selectedContact.contactId}`,
         {
-          firstName: selectedContact.firstName,
-          lastName: selectedContact.lastName,
-          phoneNumber: selectedContact.phoneNumber,
+          firstName: editedContact.firstName,
+          lastName: editedContact.lastName,
+          phoneNumber: editedContact.phoneNumber,
         }
       );
       closeModal();
@@ -55,11 +56,10 @@ const Dashboard = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setEditedContact({
-      ...editedContact,
+    setEditedContact((prevContact) => ({
+      ...prevContact,
       [name]: value,
-    });
-    console.log("setEditedContact", setEditedContact);
+    }));
   };
 
   const handleDelete = (contact) => {
