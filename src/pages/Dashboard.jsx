@@ -4,9 +4,13 @@ import SideBar from "../components/SideBar";
 import axios from "axios";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { Modal, Button } from "@mui/material";
 
 const Dashboard = () => {
   const [contacts, setContacts] = useState([]);
+  const [selectedContact, setSelectedContact] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   useEffect(() => {
     fetchContacts();
@@ -22,27 +26,31 @@ const Dashboard = () => {
     }
   };
 
-  const handleEdit = async (contact) => {
-    try {
-      const response = await axios.patch(
-        `http://localhost:8000/api/v1/contact/${contact.contactId}`,
-        contact
-      );
-      fetchContacts(); // Refetch contacts after update
-    } catch (error) {
-      console.error(error);
-    }
+  const handleEdit = (contact) => {
+    setSelectedContact(contact);
+    setIsEditModalOpen(true);
   };
 
-  const handleDelete = async (contactId) => {
-    try {
-      const response = await axios.delete(
-        `http://localhost:8000/api/v1/contact/${contactId}`
-      );
-      fetchContacts(); // Refetch contacts after deletion
-    } catch (error) {
-      console.error(error);
-    }
+  const handleUpdate = (contact) => {
+    setSelectedContact(contact);
+    setIsEditModalOpen(true);
+  };
+
+  const handleInputChange = (contact) => {
+    setSelectedContact(contact);
+    setIsEditModalOpen(true);
+  };
+
+  const handleDelete = (contactId) => {
+    setSelectedContact(contactId);
+    setIsDeleteModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedContact(null);
+    setIsEditModalOpen(false);
+    setIsDeleteModalOpen(false);
+    fetchContacts();
   };
 
   return (
@@ -92,10 +100,13 @@ const Dashboard = () => {
                     {contact.phoneNumber}
                   </td>
                   <td className="py-2 px-4 border border-gray-300">
-                    <button className="mr-2" onClick={() => handleEdit(index)}>
+                    <button
+                      className="mr-2"
+                      onClick={() => handleEdit(contact)}
+                    >
                       <EditIcon />
                     </button>
-                    <button onClick={() => handleDelete(index)}>
+                    <button onClick={() => handleDelete(contact.contactId)}>
                       <DeleteIcon />
                     </button>
                   </td>
@@ -105,6 +116,89 @@ const Dashboard = () => {
           </table>
         </main>
       </div>
+
+      {/* Edit Modal */}
+      <Modal
+        open={isEditModalOpen}
+        onClose={closeModal}
+        aria-labelledby="edit-modal-title"
+        className="flex justify-center items-center"
+      >
+        <div className="modal-content bg-white p-8 rounded-lg shadow-lg w-96">
+          <h2 id="edit-modal-title" className="text-xl font-bold mb-4">
+            Edit Contact
+          </h2>
+          <form onSubmit={handleUpdate}>
+            <div className="mb-4 flex flex-col">
+              <label htmlFor="firstName" className="mb-1">
+                First Name:
+              </label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                value={selectedContact?.firstName || ""}
+                onChange={handleInputChange}
+                className="rounded-lg border border-gray-300 px-3 py-2 mb-2"
+              />
+            </div>
+            <div className="mb-4 flex flex-col">
+              <label htmlFor="lastName" className="mb-1">
+                Last Name:
+              </label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                value={selectedContact?.lastName || ""}
+                onChange={handleInputChange}
+                className="rounded-lg border border-gray-300 px-3 py-2 mb-2"
+              />
+            </div>
+            <div className="mb-4 flex flex-col">
+              <label htmlFor="phoneNumber" className="mb-1">
+                Phone Number:
+              </label>
+              <input
+                type="text"
+                id="phoneNumber"
+                name="phoneNumber"
+                value={selectedContact?.phoneNumber || ""}
+                onChange={handleInputChange}
+                className="rounded-lg border border-gray-300 px-3 py-2 mb-2"
+              />
+            </div>
+            <div className="flex justify-end">
+              <button
+                type="submit"
+                className="bg-blue-500 text-white px-4 py-2 rounded-lg mr-2"
+              >
+                Update
+              </button>
+              <button
+                type="button"
+                onClick={closeModal}
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </Modal>
+
+      {/* Delete Modal */}
+      <Modal
+        open={isDeleteModalOpen}
+        onClose={closeModal}
+        aria-labelledby="delete-modal-title"
+      >
+        <div className="modal-content">
+          <h2 id="delete-modal-title">Delete Contact</h2>
+          {/* Place your delete modal content here */}
+          <Button onClick={closeModal}>Close</Button>
+        </div>
+      </Modal>
     </div>
   );
 };
