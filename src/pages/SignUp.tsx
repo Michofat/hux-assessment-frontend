@@ -1,127 +1,115 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Link, useNavigate } from "react-router-dom";
+import { userLoginValidationSchema } from "../utils/validation";
+import axiosInstance from "../utils/apiCall";
+import { toast } from "react-toastify";
+import { setToken } from "../utils/token";
+import CircularProgress from "@mui/material/CircularProgress";
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
 
-const SignUp: React.FC = () => {
+const SignUp = () => {
+  const nav = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm();
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: yupResolver(userLoginValidationSchema),
+  });
 
-  const onSubmit = (data: unknown) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      setIsLoading(true); // Start CircularProgress
+
+      const response = await axiosInstance.post("/user", data);
+      alert("User account created successfully");
+      nav("/userLogin");
+    } catch (error) {
+      alert(error.response?.data?.message || "An error occurred");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-lg text-center">
-        <h1 className="text-2xl font-bold sm:text-3xl">Get started today!</h1>
-
-        <p className="mt-4 text-gray-500">
-          For signing up, please provide a valid email address and a password
-          containing at least 8 characters.
-        </p>
-      </div>
-
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="mx-auto mb-0 mt-8 max-w-md space-y-4"
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
       >
-        <div>
-          <label htmlFor="email" className="sr-only">
-            Email
-          </label>
+        <Typography component="h1" variant="h5">
+          Create Account
+        </Typography>
+        <Box
+          component="form"
+          onSubmit={handleSubmit(onSubmit)}
+          noValidate
+          sx={{ mt: 1 }}
+        >
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            autoComplete="email"
+            autoFocus
+            {...register("email")}
+            error={!!errors.email}
+            helperText={errors.email?.message}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            {...register("password")}
+            error={!!errors.password}
+            helperText={errors.password?.message}
+          />
 
-          <div className="relative">
-            <input
-              type="email"
-              id="email"
-              {...register("email")}
-              className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
-              placeholder="Enter email"
-            />
-
-            {errors.email && (
-              <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 text-red-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  ></path>
-                </svg>
-              </span>
-            )}
-          </div>
-
-          {errors.email && (
-            <p className="text-sm text-red-500">Invalid email</p>
-          )}
-        </div>
-
-        <div>
-          <label htmlFor="password" className="sr-only">
-            Password
-          </label>
-
-          <div className="relative">
-            <input
-              type="password"
-              id="password"
-              {...register("password")}
-              className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
-              placeholder="Enter password"
-            />
-
-            {errors.password && (
-              <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 text-red-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  ></path>
-                </svg>
-              </span>
-            )}
-          </div>
-
-          {errors.password && (
-            <p className="text-sm text-red-500">Invalid password</p>
-          )}
-        </div>
-
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-500">
-            No account?
-            <a className="underline" href="#">
-              Sign up
-            </a>
-          </p>
-
-          <button
+          <Button
             type="submit"
-            className="inline-block rounded-lg bg-blue-500 px-5 py-3 text-sm font-medium text-white"
+            variant="contained"
+            color="primary"
+            fullWidth
+            disabled={isSubmitting}
+            sx={{ mt: 3, mb: 2 }}
           >
-            Sign up
-          </button>
-        </div>
-      </form>
-    </div>
+            {isLoading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              "Sign Up"
+            )}
+          </Button>
+          <Grid container>
+            <Grid item xs></Grid>
+            <Grid item>
+              <Link to="/userlogin" style={{ textDecoration: "none" }}>
+                Already have an account? Sign In
+              </Link>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
+    </Container>
   );
 };
 

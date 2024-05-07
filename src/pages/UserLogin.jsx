@@ -107,7 +107,7 @@ const UserLogin = () => {
           <Grid container>
             <Grid item xs></Grid>
             <Grid item>
-              <Link to="/registration" style={{ textDecoration: "none" }}>
+              <Link to="/signup" style={{ textDecoration: "none" }}>
                 Don't have an account? Sign Up
               </Link>
             </Grid>
